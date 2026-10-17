@@ -6,7 +6,6 @@ import {
   ArrowRight,
   ChevronDown,
   Globe,
-  LayoutGrid,
   Menu,
   X,
 } from "lucide-react";

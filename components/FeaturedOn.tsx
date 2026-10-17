@@ -21,14 +21,18 @@ const Stat: React.FC<(typeof STATS)[number] & { className?: string }> = ({
   className,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [n, setN] = useState(0);
+  const [n, setN] = useState(() =>
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? value
+      : 0
+  );
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setN(value);
       return;
     }
 

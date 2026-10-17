@@ -104,10 +104,9 @@ const CandleShape = ({
 };
 
 /* Glowing dot on selected points of the curve */
-const makeDot =
-  (marks: number[]) =>
+const makeDot = (marks: number[]) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (p: any) => {
+  const DotComponent = (p: any) => {
     const { cx, cy, index } = p as { cx: number; cy: number; index: number };
     if (!marks.includes(index)) return <g key={`d-${index}`} />;
     return (
@@ -124,6 +123,9 @@ const makeDot =
       </g>
     );
   };
+  DotComponent.displayName = "DotComponent";
+  return DotComponent;
+};
 
 /* ------------------------------------------------------------------ */
 /* Component                                                           */
