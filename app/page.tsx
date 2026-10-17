@@ -1,14 +1,8 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
 
-import React from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Hero } from '@/components/Hero';
 import { FeaturedOn } from '@/components/FeaturedOn';
 import { PricingSection } from '@/components/PricingSection';
-import { Footer } from '@/components/Footer';
 import { TrustedBy } from '@/components/trustedby';
 
 export default function Home() {
@@ -21,7 +15,6 @@ export default function Home() {
         <TrustedBy />
         <PricingSection />
       </main>
-      <Footer />
     </div>
   );
 }
