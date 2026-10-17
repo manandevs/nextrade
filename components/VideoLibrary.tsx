@@ -31,7 +31,7 @@ export const VideoLibrary: React.FC = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="font-heading font-bold text-lg text-white">{title}</h3>
-        <a href="#all" className="text-xs font-mono text-[#3DDC97] hover:underline flex items-center gap-1">
+        <a href="#all" className="text-xs font-neue text-[#3DDC97] hover:underline flex items-center gap-1">
           View All →
         </a>
       </div>
@@ -44,7 +44,7 @@ export const VideoLibrary: React.FC = () => {
           >
             {/* Thumbnail Header */}
             <div className="relative h-36 bg-gradient-to-br from-[#121B17] via-[#0d1712] to-[#0A0F0D] p-4 flex flex-col justify-between border-b border-[#3DDC97]/15">
-              <div className="flex justify-between items-center text-[10px] font-mono text-[#9AA8A1]">
+              <div className="flex justify-between items-center text-[10px] font-neue text-[#9AA8A1]">
                 <span>{item.duration}</span>
                 <span className="px-2 py-0.5 rounded bg-[#3DDC97]/15 text-[#3DDC97]">{item.level}</span>
               </div>
@@ -82,7 +82,7 @@ export const VideoLibrary: React.FC = () => {
         <div className="bg-[#121B17] border border-[#3DDC97]/30 rounded-2xl p-6 sm:p-10 shadow-2xl space-y-12">
           
           <div className="border-b border-[#3DDC97]/20 pb-4">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#3DDC97]">
+            <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
               VIDEO LIBRARY
             </span>
           </div>

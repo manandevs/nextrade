@@ -19,7 +19,7 @@ export const TopicsIncluded: React.FC = () => {
   return (
     <section className="py-16">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-        <span className="text-xs font-mono uppercase tracking-widest text-[#3DDC97]">
+        <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
           TOPICS INCLUDED
         </span>
         <div className="flex flex-wrap items-center justify-center gap-3">

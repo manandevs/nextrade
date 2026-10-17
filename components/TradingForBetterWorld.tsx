@@ -16,7 +16,7 @@ export const TradingForBetterWorld: React.FC = () => {
             
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6">
-              <span className="text-xs font-mono uppercase tracking-widest text-[#3DDC97]">
+              <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
                 TRADING FOR A BETTER WORLD
               </span>
               <h2 className="font-heading text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white leading-tight">

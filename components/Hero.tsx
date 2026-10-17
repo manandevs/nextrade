@@ -3,185 +3,179 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { Play, TrendingUp, Users, BookOpen, Radio } from 'lucide-react';
+import React from "react";
+import { ArrowLeftRight, ArrowUpRight, BadgeCheck, Share2, Star } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const REWARDS = [
+  { name: "Ethereum (ETH)", sub: "Proof of Stake", rate: "13.65%", change: "+31.6%", up: true, glyph: "Ξ", color: "from-[#7C8CFF] to-[#4A5BDB]" },
+  { name: "BNB Chain (BNB)", sub: "Proof of Stake", rate: "15.25%", change: "+31.6%", up: true, glyph: "B", color: "from-[#FFD43B] to-[#E0A800]" },
+  { name: "Polygon (Matic)", sub: "Proof of Stake", rate: "11.45%", change: "-7.5%", up: false, glyph: "M", color: "from-[#A06BFF] to-[#6A35D9]" },
+  { name: "Solana (SOL)", sub: "Proof of Stake", rate: "14.54%", change: "+31.6%", up: true, glyph: "S", color: "from-[#3DDC97] to-[#16A36A]" },
+];
+
+const TradeCard: React.FC = () => (
+  <div className="relative w-full max-w-[420px] rounded-2xl border border-white/10 bg-[#0F1613]/80 p-4 shadow-[0_0_80px_rgba(61,220,151,0.14)] backdrop-blur-xl sm:p-5">
+    {/* Header */}
+    <div className="flex items-center gap-3">
+      <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#5BF0AE] to-[#1FA36B] text-lg font-extrabold text-[#0A0F0D]">
+        N
+      </span>
+      <div className="min-w-0">
+        <p className="text-sm font-semibold text-white">BTC/USDT</p>
+        <p className="truncate text-[10px] text-white/45">Bitcoin Token · 0×23A … 4F2Td</p>
+      </div>
+    </div>
+
+    {/* Actions */}
+    <div className="mt-4 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        {[ArrowLeftRight, Star, Share2].map((Icon, i) => (
+          <span
+            key={i}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-white/60"
+          >
+            <Icon className={cn("h-3.5 w-3.5", i === 1 && "fill-[#FFD43B] text-[#FFD43B]")} />
+          </span>
+        ))}
+      </div>
+      <span className="rounded-lg border border-white/20 px-4 py-1.5 text-xs font-medium text-white">
+        Trade
+      </span>
+    </div>
+
+    {/* Price */}
+    <p className="mt-5 font-mono text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+      68,430.12$
+    </p>
+    <div className="mt-2 flex items-center justify-between text-[10px] text-white/50">
+      <span className="flex items-center gap-1.5">
+        <span className="h-3 w-3 rounded-full bg-[#7C8CFF]" />
+        0.2498488
+      </span>
+      <span className="flex items-center gap-1.5">
+        24H: <span className="text-[#3DDC97]">+5.74</span>
+        <span className="h-3 w-3 rounded-full bg-[#3DDC97]" />
+      </span>
+    </div>
+
+    {/* Rewards grid */}
+    <div className="mt-4 grid grid-cols-2 gap-2.5">
+      {REWARDS.map((r) => (
+        <div
+          key={r.name}
+          className="rounded-xl border border-white/10 bg-white/[0.04] p-3 transition-colors hover:border-[#3DDC97]/30"
+        >
+          <div className="flex items-center gap-2">
+            <span
+              className={cn(
+                "flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-[10px] font-bold text-white",
+                r.color
+              )}
+            >
+              {r.glyph}
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-[11px] font-medium text-white">{r.name}</p>
+              <p className="text-[9px] text-white/40">{r.sub}</p>
+            </div>
+          </div>
+          <p className="mt-3 text-[9px] text-white/40">Reward Rate</p>
+          <div className="mt-0.5 flex items-center gap-1.5">
+            <span className="text-lg font-semibold text-white">{r.rate}</span>
+            <span
+              className={cn(
+                "rounded px-1 py-0.5 text-[8px] font-semibold",
+                r.up ? "bg-[#3DDC97]/15 text-[#3DDC97]" : "bg-[#FF5C5C]/15 text-[#FF5C5C]"
+              )}
+            >
+              {r.change}
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative pt-12 pb-20 lg:pt-20 lg:pb-32 overflow-hidden">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* Left Column */}
-          <div className="lg:col-span-6 space-y-8 text-left">
-            
-            {/* Outlined Pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#3DDC97]/40 bg-[#3DDC97]/10 text-xs font-semibold text-[#3DDC97]">
-              <span className="w-2 h-2 rounded-full bg-[#3DDC97] animate-pulse" />
+    <section
+      className="relative isolate overflow-hidden py-16 lg:py-24"
+      style={{
+        backgroundImage: "url('/images/image.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Readability overlay + soft emerald glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(10,15,13,0.85) 0%, rgba(10,15,13,0.35) 55%, rgba(10,15,13,0.1) 100%), radial-gradient(ellipse 45% 55% at 78% 40%, rgba(61,220,151,0.20), transparent 70%)",
+        }}
+      />
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
+          {/* Left column */}
+          <div className="flex flex-col items-start text-left lg:col-span-7">
+            {/* Pill */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 py-1 pl-3.5 pr-1 text-[11px] font-medium text-white/85 backdrop-blur-sm">
               <span>Next-gen trading education</span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-white">
+                <BadgeCheck className="h-3 w-3 text-[#3DDC97]" />
+                Success
+              </span>
             </div>
 
-            {/* H1 Headline */}
-            <h1 className="font-heading text-4xl sm:text-6xl font-black uppercase tracking-tight leading-[1.05] text-white">
-              TRADE SMARTER.<br />
-              <span className="text-[#3DDC97]">GROW FASTER.</span>
+            {/* Headline */}
+            <h1 className="mt-6 text-4xl font-medium leading-[1.12] tracking-tight text-white sm:text-5xl lg:text-6xl">
+              Trade smarter.
+              <br />
+              Grow faster.
             </h1>
 
             {/* Subtext */}
-            <p className="text-base sm:text-lg text-[#9AA8A1] max-w-lg leading-relaxed font-sans">
-              Proven strategies, real market insights and a supportive community to help you become a consistently profitable trader.
+            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/60 sm:text-base">
+              Proven strategies, real market insights and a supportive community
+              to help you become a consistently profitable trader.
             </p>
 
             {/* Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="#pricing"
-                className="px-8 py-4 rounded-full bg-[#FFD43B] text-black font-bold text-sm uppercase tracking-wider hover:bg-[#ffdf64] transition-all text-center shadow-[0_0_25px_rgba(255,212,59,0.3)] hover:scale-105"
+                className={cn(
+                  buttonVariants({ variant: "light", size: "lg", shape: "rounded" }),
+                  "h-11 gap-2 px-6 text-[13px]"
+                )}
               >
-                Pick Plan →
+                Pick Plan
+                <ArrowUpRight />
               </a>
               <a
                 href="#curriculum"
-                className="px-8 py-4 rounded-full border border-[#3DDC97]/50 text-[#3DDC97] font-bold text-sm uppercase tracking-wider hover:bg-[#3DDC97]/10 transition-all text-center flex items-center justify-center gap-3"
+                className={cn(
+                  buttonVariants({ variant: "emerald", size: "lg", shape: "rounded" }),
+                  "h-11 bg-gradient-to-b from-[#5BF0AE] to-[#2BB87A] px-6 text-[13px] shadow-[0_8px_30px_rgba(61,220,151,0.35)]"
+                )}
               >
-                <div className="w-7 h-7 rounded-full bg-[#3DDC97]/20 flex items-center justify-center">
-                  <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-                </div>
-                <span>Find Your Next Step</span>
+                Find Your Next Step
               </a>
             </div>
-
-            {/* 4 Icon Items Row */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-[#3DDC97]/15">
-              <div className="flex items-center gap-2.5">
-                <Radio className="w-4 h-4 text-[#3DDC97]" />
-                <span className="text-xs font-medium text-[#9AA8A1]">Live Charts</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <Users className="w-4 h-4 text-[#3DDC97]" />
-                <span className="text-xs font-medium text-[#9AA8A1]">Expert Mentorship</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <TrendingUp className="w-4 h-4 text-[#3DDC97]" />
-                <span className="text-xs font-medium text-[#9AA8A1]">Trading Community</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <BookOpen className="w-4 h-4 text-[#3DDC97]" />
-                <span className="text-xs font-medium text-[#9AA8A1]">Actionable Education</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* Right Column: Dashboard Card Mockup */}
-          <div className="lg:col-span-6 relative">
-            <div className="relative mx-auto max-w-lg lg:max-w-none transform lg:rotate-1 lg:hover:rotate-0 transition-transform duration-500">
-              
-              {/* Outer Emerald Glow */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#3DDC97]/30 to-[#FFD43B]/20 rounded-2xl blur-xl opacity-75" />
-
-              {/* Dashboard Container */}
-              <div className="relative bg-[#121B17] border border-[#3DDC97]/30 rounded-2xl p-6 shadow-2xl space-y-6">
-                
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-[#3DDC97]/15 pb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#3DDC97]/20 flex items-center justify-center text-[#3DDC97]">
-                      <TrendingUp className="w-4 h-4" />
-                    </div>
-                    <span className="font-heading font-bold text-sm text-white tracking-wider">NEXTRADE</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-[#3DDC97]/10 text-[#3DDC97] border border-[#3DDC97]/20">
-                    <span className="w-2 h-2 rounded-full bg-[#3DDC97] animate-ping" />
-                    LIVE FEED
-                  </div>
-                </div>
-
-                {/* Ticker & Chart Section */}
-                <div className="space-y-4">
-                  <div className="flex items-baseline justify-between">
-                    <div>
-                      <span className="text-xs font-mono text-[#9AA8A1]">BTC/USDT</span>
-                      <div className="font-heading text-2xl font-bold text-white font-mono mt-0.5">$68,430.12</div>
-                    </div>
-                    <span className="text-xs font-mono px-2.5 py-1 rounded bg-[#3DDC97]/20 text-[#3DDC97] font-semibold">
-                      +2.45% (24h)
-                    </span>
-                  </div>
-
-                  {/* SVG Candlestick Chart */}
-                  <div className="h-44 w-full bg-[#0A0F0D] rounded-xl border border-[#3DDC97]/20 p-3 relative overflow-hidden flex flex-col justify-end">
-                    <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#3DDC97_1px,transparent_1px)] [background-size:12px_12px]" />
-                    <svg className="w-full h-28 overflow-visible" viewBox="0 0 400 120" fill="none">
-                      <path
-                        d="M 0 90 Q 60 70, 120 75 T 240 40 T 360 25 T 400 20"
-                        stroke="#3DDC97"
-                        strokeWidth="2.5"
-                        fill="none"
-                      />
-                      <path
-                        d="M 0 90 Q 60 70, 120 75 T 240 40 T 360 25 T 400 20 L 400 120 L 0 120 Z"
-                        fill="url(#heroGrad)"
-                        opacity="0.3"
-                      />
-                      <defs>
-                        <linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#3DDC97" />
-                          <stop offset="100%" stopColor="#3DDC97" stopOpacity="0" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-
-                    {/* Timeframe buttons */}
-                    <div className="flex items-center gap-1.5 pt-2 border-t border-[#3DDC97]/15">
-                      {['1D', '1W', '1M', '1Y', 'All'].map((tf, idx) => (
-                        <button
-                          key={tf}
-                          className={`px-2.5 py-0.5 rounded text-[10px] font-mono transition-colors ${
-                            idx === 2 ? 'bg-[#3DDC97] text-black font-bold' : 'bg-[#121B17] text-[#9AA8A1] hover:text-white'
-                          }`}
-                        >
-                          {tf}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Watchlist & Portfolio Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  
-                  {/* Watchlist */}
-                  <div className="bg-[#0A0F0D] p-3.5 rounded-xl border border-[#3DDC97]/20 space-y-2">
-                    <div className="text-[11px] font-mono text-[#9AA8A1] uppercase tracking-wider">Watchlist</div>
-                    <div className="space-y-1.5 text-xs font-mono">
-                      <div className="flex justify-between items-center"><span className="text-white">BTC</span><span className="text-[#3DDC97]">+2.48%</span></div>
-                      <div className="flex justify-between items-center"><span className="text-white">ETH</span><span className="text-[#3DDC97]">+4.12%</span></div>
-                      <div className="flex justify-between items-center"><span className="text-white">SOL</span><span className="text-[#FF5C5C]">-6.22%</span></div>
-                      <div className="flex justify-between items-center"><span className="text-white">ADA</span><span className="text-[#3DDC97]">+1.87%</span></div>
-                    </div>
-                  </div>
-
-                  {/* Portfolio */}
-                  <div className="bg-[#0A0F0D] p-3.5 rounded-xl border border-[#3DDC97]/20 flex flex-col justify-between">
-                    <div className="text-[11px] font-mono text-[#9AA8A1] uppercase tracking-wider">Portfolio</div>
-                    <div>
-                      <div className="font-heading text-lg font-bold text-white font-mono">$24,680.32</div>
-                      <div className="text-xs font-mono text-[#3DDC97] mt-0.5">+12.8% (24h)</div>
-                    </div>
-                    <div className="w-full bg-[#121B17] h-2 rounded-full overflow-hidden mt-2">
-                      <div className="bg-gradient-to-r from-[#3DDC97] to-[#FFD43B] h-full w-[78%]" />
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-            </div>
+          {/* Right column: trade card */}
+          <div className="flex justify-center lg:col-span-5 lg:justify-end">
+            <TradeCard />
           </div>
-
         </div>
       </div>
     </section>

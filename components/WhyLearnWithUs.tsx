@@ -36,7 +36,7 @@ export const WhyLearnWithUs: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div className="space-y-3">
-            <span className="text-xs font-mono uppercase tracking-widest text-[#3DDC97]">
+            <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
               WHY LEARN WITH US?
             </span>
             <h2 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white">
@@ -76,7 +76,7 @@ export const WhyLearnWithUs: React.FC = () => {
               <div className="w-16 h-16 rounded-full bg-[#3DDC97] text-black flex items-center justify-center shadow-[0_0_25px_rgba(61,220,151,0.5)] group-hover:scale-110 transition-transform z-10">
                 <Play className="w-7 h-7 fill-current ml-1" />
               </div>
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-xs font-mono text-[#9AA8A1]">
+              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-xs font-neue text-[#9AA8A1]">
                 <span className="text-white font-semibold">Strategy. Discipline. Results.</span>
                 <span>12:48</span>
               </div>
@@ -90,7 +90,7 @@ export const WhyLearnWithUs: React.FC = () => {
                 <div className="text-[#3DDC97]">
                   <Star className="w-8 h-8 fill-current" />
                 </div>
-                <p className="text-white text-lg sm:text-xl leading-relaxed font-sans">
+                <p className="text-white text-lg sm:text-xl leading-relaxed font-neue">
                   &ldquo;{testimonials[currentSlide].quote}&rdquo;
                 </p>
               </div>

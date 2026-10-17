@@ -17,7 +17,7 @@ export const CharityBanner: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm">
             <span className="text-white font-medium">A significant portion of all proceeds is donated to charity</span>
             <span className="hidden sm:inline text-[#3DDC97]">•</span>
-            <span className="text-[#3DDC97] font-semibold font-mono">Better traders. A brighter future.</span>
+            <span className="text-[#3DDC97] font-semibold font-neue">Better traders. A brighter future.</span>
           </div>
         </div>
       </div>

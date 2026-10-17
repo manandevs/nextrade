@@ -1,85 +1,235 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+"use client";
 
-'use client';
+import React, { useState } from "react";
+import Image from "next/image";
+import {
+  ArrowRight,
+  ChevronDown,
+  Globe,
+  LayoutGrid,
+  Menu,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 
-import React, { useState } from 'react';
-import { ChevronDown, Menu, X, TrendingUp } from 'lucide-react';
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const LINKS = [
+  { label: "Home", href: "#home" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Programs", href: "#programs" },
+  { label: "Support", href: "#support" },
+];
+
+const ArrowBox = () => (
+  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#3DDC97]">
+    <ArrowRight className="h-4 w-4 text-[#0A0F0D]" />
+  </span>
+);
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [active, setActive] = useState("Home");
+
+  const handleNavigation = (label: string) => {
+    setActive(label);
+    setMobileMenuOpen(false);
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0A0F0D]/90 backdrop-blur-md border-b border-[#3DDC97]/15">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        
-        {/* Left: Logo & Wordmark */}
-        <a href="#" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 rounded-xl bg-[#3DDC97]/15 border border-[#3DDC97]/40 flex items-center justify-center text-[#3DDC97] group-hover:bg-[#3DDC97]/25 transition-colors shadow-[0_0_15px_rgba(61,220,151,0.2)]">
-            <TrendingUp className="w-5 h-5" />
-          </div>
-          <span className="font-heading text-xl font-extrabold tracking-wider text-white uppercase">
-            NEXT<span className="text-[#3DDC97]">RADE</span>
-          </span>
-        </a>
+    <header className="fixed top-2 z-50 w-full">
+      <div className="relative mx-auto flex h-16 max-w-[1440px] items-center px-4 sm:px-6 lg:px-8">
+        {/* Logo */}
+        <Link
+          href="#home"
+          onClick={() => handleNavigation("Home")}
+          className="flex shrink-0 items-center gap-1.5"
+          aria-label="NEXTRADE home"
+        >
+          <Image
+            src="/brand/logo.svg"
+            alt="NEXTRADE logo"
+            width={360}
+            height={36}
+            className="h-7 w-auto"
+          />
+        </Link>
 
-        {/* Center Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#9AA8A1]">
-          <a href="#platform" className="hover:text-white transition-colors">Platform</a>
-          <a href="#mentorship" className="hover:text-white transition-colors">Mentorship</a>
-          <a href="#newsletter" className="hover:text-white transition-colors">Newsletter</a>
-          <div className="flex items-center gap-1 cursor-pointer hover:text-white transition-colors">
-            <span>Content</span>
-            <ChevronDown className="w-4 h-4 text-[#3DDC97]" />
-          </div>
+        {/* Desktop navigation */}
+        <nav
+          className="ml-6 hidden items-center gap-1 lg:flex bg-white/5 backdrop-blur-2xl p-1 px-2 rounded-2xl"
+          aria-label="Main navigation"
+        >
+          {LINKS.map((link) => {
+            const isActive = active === link.label;
+
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                onClick={() => handleNavigation(link.label)}
+                aria-current={isActive ? "page" : undefined}
+                className={cn(
+                  "flex h-9 items-center gap-2 whitespace-nowrap rounded-lg px-3 text-sm font-medium transition-colors",
+                  isActive
+                    ? "bg-white/10 text-white"
+                    : "text-[#9AA8A1] hover:bg-white/5 hover:text-white",
+                )}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          
+          {/* Login / Register */}
+          <Link
+            href="#login"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "ml-3 hidden font-medium lg:inline-flex",
+            )}
+          >
+            Login / Register
+          </Link>
         </nav>
 
-        {/* Right Actions */}
-        <div className="hidden md:flex items-center gap-6">
-          <a href="#login" className="text-sm font-medium text-[#9AA8A1] hover:text-white transition-colors">
-            Login
-          </a>
-          <a
-            href="#pricing"
-            className="px-5 py-2.5 rounded-full bg-[#FFD43B] text-black font-bold text-xs uppercase tracking-wider hover:bg-[#ffdf64] transition-all shadow-[0_0_20px_rgba(255,212,59,0.25)] hover:scale-105"
+        <div className="flex-1" />
+
+        {/* Desktop actions */}
+        <div className="hidden items-center gap-3 lg:flex">
+          <Button
+            type="button"
+            variant="ghost"
+            aria-label="Select language"
+            className="border border-white/10 bg-white/5 px-3.5 font-normal text-[#C9D3CE]"
           >
-            Pick Plan →
-          </a>
+            <Globe className="h-4 w-4" />
+            English
+            <ChevronDown className="!h-3.5 !w-3.5" />
+          </Button>
+
+          <Link
+            href="#pricing"
+            className={cn(
+              buttonVariants({ variant: "light" }),
+              "gap-3 pl-4 pr-1.5",
+            )}
+          >
+            Start a challenge
+            <ArrowBox />
+          </Link>
+
+          <Link
+            href="#free-trial"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "border-white/20 bg-black/40 font-medium",
+            )}
+          >
+            Free trial
+          </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex md:hidden">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg text-[#9AA8A1] hover:text-white hover:bg-[#121B17]"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
+        {/* Mobile menu button */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+          className="ml-2 lg:hidden"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
+        >
+          {mobileMenuOpen ? (
+            <X className="!h-6 !w-6" />
+          ) : (
+            <Menu className="!h-6 !w-6" />
+          )}
+        </Button>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile navigation drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-[#0A0F0D] border-b border-[#3DDC97]/20 px-6 py-6 space-y-4">
-          <a href="#platform" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium text-[#9AA8A1] hover:text-white py-2">Platform</a>
-          <a href="#mentorship" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium text-[#9AA8A1] hover:text-white py-2">Mentorship</a>
-          <a href="#newsletter" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium text-[#9AA8A1] hover:text-white py-2">Newsletter</a>
-          <a href="#content" onClick={() => setMobileMenuOpen(false)} className="block text-base font-medium text-[#9AA8A1] hover:text-white py-2">Content</a>
-          <div className="pt-4 border-t border-[#3DDC97]/15 flex flex-col gap-3">
-            <a href="#login" className="text-center py-2 text-[#9AA8A1]">Login</a>
-            <a
+        <div
+          id="mobile-navigation"
+          className="space-y-1 border-t border-white/10 bg-[#0A0F0D] px-4 py-5 lg:hidden"
+        >
+          <nav aria-label="Mobile navigation" className="space-y-1">
+            {LINKS.map((link) => {
+              const isActive = active === link.label;
+
+              return (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => handleNavigation(link.label)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={cn(
+                    "block rounded-lg px-3 py-2.5 text-base font-medium transition-colors",
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-[#9AA8A1] hover:bg-white/5 hover:text-white",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="flex flex-col gap-3 pt-4">
+            <Link
+              href="#login"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "h-11 text-sm",
+              )}
+            >
+              Login / Register
+            </Link>
+
+            <Link
               href="#pricing"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full py-3 rounded-full bg-[#FFD43B] text-black font-bold text-xs uppercase text-center tracking-wider"
+              className={cn(
+                buttonVariants({ variant: "light" }),
+                "h-11 gap-3 text-sm",
+              )}
             >
-              Pick Plan →
-            </a>
+              Start a challenge
+              <ArrowBox />
+            </Link>
+
+            <Link
+              href="#free-trial"
+              onClick={() => setMobileMenuOpen(false)}
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "h-11 border-white/20 bg-black/40 text-sm",
+              )}
+            >
+              Free trial
+            </Link>
+
+            {/* Mobile language selector */}
+            <Button
+              type="button"
+              variant="ghost"
+              aria-label="Select language"
+              className="h-11 justify-center border border-white/10 bg-white/5 font-normal text-[#C9D3CE]"
+            >
+              <Globe className="h-4 w-4" />
+              English
+              <ChevronDown className="!h-3.5 !w-3.5" />
+            </Button>
           </div>
         </div>
       )}
     </header>
   );
 };
+
+export default Navbar;
