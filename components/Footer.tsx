@@ -35,7 +35,7 @@ export const Footer: React.FC = () => {
                   <Star key={i} className="w-4 h-4 fill-[#3DDC97] text-[#3DDC97]" />
                 ))}
               </div>
-              <div className="text-xs font-neue text-white">
+              <div className="text-xs font-telegraf text-white">
                 <strong className="text-[#3DDC97]">4.8/5</strong> from 12,000+ traders
               </div>
             </div>
@@ -83,10 +83,10 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-heading font-bold text-sm text-white uppercase tracking-wider">Get the App</h4>
             <div className="space-y-3">
-              <a href="#apple" className="block px-4 py-3 rounded-xl bg-[#121B17] border border-[#3DDC97]/30 text-white font-neue text-xs text-center hover:border-[#3DDC97] transition-colors">
+              <a href="#apple" className="block px-4 py-3 rounded-xl bg-[#121B17] border border-[#3DDC97]/30 text-white font-telegraf text-xs text-center hover:border-[#3DDC97] transition-colors">
                  App Store
               </a>
-              <a href="#google" className="block px-4 py-3 rounded-xl bg-[#121B17] border border-[#3DDC97]/30 text-white font-neue text-xs text-center hover:border-[#3DDC97] transition-colors">
+              <a href="#google" className="block px-4 py-3 rounded-xl bg-[#121B17] border border-[#3DDC97]/30 text-white font-telegraf text-xs text-center hover:border-[#3DDC97] transition-colors">
                 Google Play
               </a>
             </div>

@@ -104,7 +104,7 @@ const TradeCard: React.FC = () => (
 export const Hero: React.FC = () => {
   return (
     <section
-      className="relative isolate overflow-hidden py-16 lg:py-24"
+      className="relative isolate overflow-hidden py-16 lg:py-24 min-h-screen"
       style={{
         backgroundImage: "url('/images/image.png')",
         backgroundSize: "cover",

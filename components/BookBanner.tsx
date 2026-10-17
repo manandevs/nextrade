@@ -16,7 +16,7 @@ export const BookBanner: React.FC = () => {
             
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6">
-              <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
+              <span className="text-xs font-telegraf uppercase tracking-widest text-[#3DDC97]">
                 FEATURED IN A BOOK
               </span>
               <h2 className="font-heading text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white leading-tight">
@@ -40,7 +40,7 @@ export const BookBanner: React.FC = () => {
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-56 h-72 rounded-xl bg-gradient-to-br from-[#0A0F0D] via-[#15231b] to-[#0A0F0D] border-2 border-[#3DDC97]/50 shadow-[0_20px_50px_rgba(61,220,151,0.25)] p-6 flex flex-col justify-between transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <div className="space-y-2">
-                  <div className="text-[10px] font-neue text-[#3DDC97] uppercase">Bestseller</div>
+                  <div className="text-[10px] font-telegraf text-[#3DDC97] uppercase">Bestseller</div>
                   <h3 className="font-heading font-black text-lg text-white leading-tight uppercase">
                     MODERN TRADING
                   </h3>
@@ -50,7 +50,7 @@ export const BookBanner: React.FC = () => {
                   <path d="M 0 60 Q 50 20, 100 40 T 200 15" stroke="#3DDC97" strokeWidth="2.5" fill="none" />
                 </svg>
 
-                <div className="flex justify-between items-end text-[10px] font-neue text-[#9AA8A1]">
+                <div className="flex justify-between items-end text-[10px] font-telegraf text-[#9AA8A1]">
                   <span>NEXTRADE</span>
                   <span>EDITION</span>
                 </div>

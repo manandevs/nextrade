@@ -3,9 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { CandleBackground } from "@/components/CandleBackground";
 
-const lokanova = localFont({
-  src: "../public/fonts/ppneuemontreal-book.otf",
-  variable: "--font-neue",
+const telegraf = localFont({
+  src: "../public/fonts/telegraf-regular.otf",
+  variable: "--font-telegraf",
   display: "swap",
 });
 
@@ -24,14 +24,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${lokanova.variable} ${lokanova.className} h-full antialiased bg-[#0A0F0D]`}
+      className={`${telegraf.variable} ${telegraf.className} antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0A0F0D] text-white relative">
-        {/* Fixed Animated Candlestick Background */}
-        <CandleBackground />
-
-        {/* Page Content Wrapper with z-index 1 */}
-        <div className="relative z-10 flex flex-col flex-1">{children}</div>
+      <body className="bg-[#0A0F0D] text-white">
+        {children}
       </body>
     </html>
   );

@@ -74,7 +74,7 @@ export const PricingSection: React.FC = () => {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         <div className="text-center space-y-4">
-          <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
+          <span className="text-xs font-telegraf uppercase tracking-widest text-[#3DDC97]">
             MEMBERSHIP TIERS
           </span>
           <h2 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white">
@@ -115,13 +115,13 @@ export const PricingSection: React.FC = () => {
 
                   {/* Price */}
                   <div className="flex items-baseline gap-1 pt-2 border-t border-[#3DDC97]/15">
-                    <span className="font-heading font-black text-4xl sm:text-5xl text-white font-neue">{p.price}</span>
-                    <span className="text-xs font-neue text-[#9AA8A1]">/one-time</span>
+                    <span className="font-heading font-black text-4xl sm:text-5xl text-white font-telegraf">{p.price}</span>
+                    <span className="text-xs font-telegraf text-[#9AA8A1]">/one-time</span>
                   </div>
 
                   {/* Highlights Checklist */}
                   <div className="space-y-3 pt-2">
-                    <div className="text-xs font-neue text-[#3DDC97] uppercase tracking-wider">Highlights:</div>
+                    <div className="text-xs font-telegraf text-[#3DDC97] uppercase tracking-wider">Highlights:</div>
                     <ul className="space-y-2.5">
                       {p.highlights.map((h, i) => (
                         <li key={i} className="flex items-center gap-2.5 text-xs text-white">
@@ -134,7 +134,7 @@ export const PricingSection: React.FC = () => {
 
                   {/* What's Included Checklist */}
                   <div className="space-y-3 pt-2 border-t border-[#3DDC97]/15">
-                    <div className="text-xs font-neue text-[#9AA8A1] uppercase tracking-wider">What&apos;s included:</div>
+                    <div className="text-xs font-telegraf text-[#9AA8A1] uppercase tracking-wider">What&apos;s included:</div>
                     <ul className="space-y-2.5">
                       {p.included.map((inc, i) => (
                         <li key={i} className="flex items-center gap-2.5 text-xs text-[#9AA8A1]">

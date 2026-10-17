@@ -15,7 +15,7 @@ export const HowMuchContent: React.FC = () => {
             
             {/* Left Content */}
             <div className="lg:col-span-6 space-y-6">
-              <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
+              <span className="text-xs font-telegraf uppercase tracking-widest text-[#3DDC97]">
                 HOW MUCH CONTENT?
               </span>
               <h2 className="font-heading text-3xl sm:text-4xl font-extrabold uppercase tracking-tight text-white leading-tight">
@@ -42,9 +42,9 @@ export const HowMuchContent: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#FF5C5C] animate-pulse" />
-                    <span className="text-xs font-neue text-white">Live Analysis</span>
+                    <span className="text-xs font-telegraf text-white">Live Analysis</span>
                   </div>
-                  <span className="text-xs font-neue text-[#9AA8A1]">BTC/USDT • 1H</span>
+                  <span className="text-xs font-telegraf text-[#9AA8A1]">BTC/USDT • 1H</span>
                 </div>
 
                 {/* Candlestick Downtrend Chart with Red Arrow */}
@@ -67,7 +67,7 @@ export const HowMuchContent: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center text-xs font-neue text-[#9AA8A1]">
+                <div className="flex justify-between items-center text-xs font-telegraf text-[#9AA8A1]">
                   <span>Technical Breakdown</span>
                   <span>12:34</span>
                 </div>

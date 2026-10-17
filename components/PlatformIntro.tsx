@@ -26,7 +26,7 @@ export const PlatformIntro: React.FC = () => {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
         
         <div className="space-y-3">
-          <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
+          <span className="text-xs font-telegraf uppercase tracking-widest text-[#3DDC97]">
             THE NEXTRADE PLATFORM
           </span>
           <h2 className="font-heading text-3xl sm:text-5xl font-extrabold uppercase tracking-tight text-white">

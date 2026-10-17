@@ -1,268 +1,237 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
+"use client";
 
-'use client';
+import React, { useMemo } from "react";
+import {
+  Bar,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { cn } from "@/lib/utils";
 
-import React, { useEffect, useRef } from 'react';
-
-export interface CandleBackgroundProps {
-  candleCount?: number;
-  baseOpacity?: number; // e.g. 0.08 (6-10%)
-  glowOpacity?: number; // e.g. 0.42
-  cycleDuration?: number; // total cycle in seconds (default 12)
-  bullColor?: string; // default '#3DDC97'
-  bearColor?: string; // default '#FF5C5C'
-}
-
-interface Candle {
-  x: number;
+/* ------------------------------------------------------------------ */
+/* Data (deterministic -> no hydration mismatch)                       */
+/* ------------------------------------------------------------------ */
+type Candle = {
+  i: number;
   open: number;
   close: number;
   high: number;
   low: number;
-  isBullish: boolean;
-  index: number;
+  range: [number, number]; // [low, high] drives the wick bar
+  trend: number; // curve value
+};
+
+function buildData(count: number): Candle[] {
+  return Array.from({ length: count }, (_, i) => {
+    const t = i / (count - 1);
+    const center = 30 + t * 42 + Math.sin(i * 0.85) * 7 + Math.cos(i * 2.1) * 3;
+    const body =
+      4 + Math.abs(Math.sin(i * 1.7)) * 9 + (i === Math.round(count / 2) ? 10 : 0);
+    const bull = Math.sin(i * 1.3 + 0.5) > -0.35; // ~70% bullish
+    const open = bull ? center - body / 2 : center + body / 2;
+    const close = bull ? center + body / 2 : center - body / 2;
+    const high = Math.max(open, close) + 3 + Math.abs(Math.sin(i * 3.1)) * 5;
+    const low = Math.min(open, close) - 3 - Math.abs(Math.cos(i * 2.3)) * 5;
+    return {
+      i,
+      open,
+      close,
+      high,
+      low,
+      range: [low, high],
+      trend: center + Math.sin(i * 0.35) * 8 - 4,
+    };
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* Custom candle (wick + body) drawn inside a Recharts <Bar>           */
+/* ------------------------------------------------------------------ */
+interface ShapeProps {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  payload?: Candle;
+  index?: number;
+}
+
+const CandleShape = ({
+  x = 0,
+  y = 0,
+  width = 0,
+  height = 0,
+  payload,
+  index = 0,
+}: ShapeProps) => {
+  if (!payload) return null;
+  const { open, close, high, low } = payload;
+  const bull = close >= open;
+  const h = Math.abs(height);
+  const unit = h / Math.max(high - low, 0.0001);
+  const bodyTop = y + (high - Math.max(open, close)) * unit;
+  const bodyH = Math.max(Math.abs(close - open) * unit, 2);
+  const cx = x + width / 2;
+  const bw = Math.min(width, 9);
+
+  return (
+    <g
+      className="cb-candle"
+      style={{ animationDelay: `${(index * 0.12).toFixed(2)}s` }}
+    >
+      <line
+        x1={cx}
+        x2={cx}
+        y1={y}
+        y2={y + h}
+        stroke={bull ? "#3DDC97" : "#FF5C5C"}
+        strokeOpacity={bull ? 0.45 : 0.3}
+        strokeWidth={1.2}
+      />
+      <rect
+        x={cx - bw / 2}
+        y={bodyTop}
+        width={bw}
+        height={bodyH}
+        rx={2.5}
+        fill={bull ? "url(#cb-bull)" : "url(#cb-bear)"}
+      />
+    </g>
+  );
+};
+
+/* Glowing dot on selected points of the curve */
+const makeDot =
+  (marks: number[]) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (p: any) => {
+    const { cx, cy, index } = p as { cx: number; cy: number; index: number };
+    if (!marks.includes(index)) return <g key={`d-${index}`} />;
+    return (
+      <g key={`d-${index}`}>
+        <circle
+          className="cb-halo"
+          cx={cx}
+          cy={cy}
+          r={20}
+          fill="url(#cb-halo)"
+          style={{ animationDelay: `${marks.indexOf(index) * 0.7}s` }}
+        />
+        <circle cx={cx} cy={cy} r={3.6} fill="#B8FFDD" />
+      </g>
+    );
+  };
+
+/* ------------------------------------------------------------------ */
+/* Component                                                           */
+/* ------------------------------------------------------------------ */
+interface CandleBackgroundProps {
+  /** Number of candles (default 44) */
+  count?: number;
+  className?: string;
 }
 
 export const CandleBackground: React.FC<CandleBackgroundProps> = ({
-  candleCount,
-  baseOpacity = 0.08,
-  glowOpacity = 0.42,
-  cycleDuration = 12,
-  bullColor = '#3DDC97',
-  bearColor = '#FF5C5C',
+  count = 44,
+  className,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let isVisible = !document.hidden;
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let prefersReducedMotion = mediaQuery.matches;
-
-    const handleVisibilityChange = () => {
-      isVisible = !document.hidden;
-    };
-    const handleMotionChange = (e: MediaQueryListEvent) => {
-      prefersReducedMotion = e.matches;
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    mediaQuery.addEventListener('change', handleMotionChange);
-
-    // Determine responsive candle count
-    const getResponsiveCount = () => {
-      if (candleCount) return candleCount;
-      const width = window.innerWidth;
-      if (width >= 1024) return 60;
-      if (width >= 768) return 40;
-      return 26;
-    };
-
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    const resizeCanvas = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.scale(dpr, dpr);
-    };
-
-    resizeCanvas();
-
-    // Generate random walk price series
-    let candles: Candle[] = [];
-    const generateCandles = () => {
-      const count = getResponsiveCount();
-      candles = [];
-      let currentPrice = height * 0.5;
-      const spacing = width / (count + 1);
-
-      for (let i = 0; i < count; i++) {
-        const x = spacing * (i + 1);
-        const volatility = 18 + Math.random() * 22;
-        const trend = -1.5; // slight upward drift in screen coordinates
-        const delta = (Math.random() - 0.48) * volatility + trend;
-        
-        const open = currentPrice;
-        const close = Math.max(80, Math.min(height - 80, open + delta));
-        currentPrice = close;
-
-        const bodyTop = Math.min(open, close);
-        const bodyBottom = Math.max(open, close);
-        // range not strictly needed for drawing body/wicks directly
-
-        const high = Math.max(40, bodyTop - (Math.random() * 16 + 4));
-        const low = Math.min(height - 40, bodyBottom + (Math.random() * 16 + 4));
-
-        const isBullish = close < open;
-        const forceBearish = i % 4 === 0;
-        const finalIsBullish = forceBearish ? false : isBullish;
-
-        candles.push({
-          x,
-          open,
-          close,
-          high,
-          low,
-          isBullish: finalIsBullish,
-          index: i,
-        });
-      }
-    };
-
-    generateCandles();
-
-    // Debounced resize
-    let resizeTimer: NodeJS.Timeout;
-    const handleResize = () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        resizeCanvas();
-        generateCandles();
-      }, 150);
-    };
-    window.addEventListener('resize', handleResize);
-
-    const startTime = performance.now();
-
-    const render = (now: number) => {
-      animationFrameId = requestAnimationFrame(render);
-
-      if (!isVisible) return;
-
-      ctx.clearRect(0, 0, width, height);
-
-      // Draw faint grid lines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
-      ctx.lineWidth = 1;
-      const gridRows = 5;
-      for (let r = 1; r < gridRows; r++) {
-        const gy = (height / gridRows) * r;
-        ctx.beginPath();
-        ctx.moveTo(0, gy);
-        ctx.lineTo(width, gy);
-        ctx.stroke();
-      }
-
-      const elapsed = (now - startTime) / 1000;
-      const cycleTime = elapsed % cycleDuration;
-
-      if (prefersReducedMotion) {
-        candles.forEach((c) => {
-          drawCandle(c, baseOpacity, 0);
-        });
-        return;
-      }
-
-      // Animation Phases:
-      // Phase 1: Sequential (0s - 6s)
-      // Phase 2: Simultaneous (6s - 9s)
-      // Phase 3: Rest (9s - 12s)
-
-      const totalCandles = candles.length;
-      const seqDuration = 6.0;
-      const stagger = seqDuration / totalCandles;
-
-      candles.forEach((c, idx) => {
-        let opacity = baseOpacity;
-        let blur = 0;
-
-        if (cycleTime <= seqDuration) {
-          const candleStart = idx * stagger;
-          const candleEnd = candleStart + 1.2;
-
-          if (cycleTime >= candleStart && cycleTime <= candleEnd) {
-            const t = (cycleTime - candleStart) / (candleEnd - candleStart);
-            const factor = Math.sin(t * Math.PI);
-            opacity = baseOpacity + (glowOpacity - baseOpacity) * factor;
-            blur = factor * 20;
-          }
-        } else if (cycleTime > seqDuration && cycleTime <= 9.0) {
-          const simProgress = (cycleTime - seqDuration) / 3.0;
-          let factor = 0;
-          if (simProgress >= 0.1 && simProgress <= 0.85) {
-            const t = (simProgress - 0.1) / 0.75;
-            factor = Math.sin(t * Math.PI);
-          }
-          opacity = baseOpacity + (glowOpacity * 0.9 - baseOpacity) * factor;
-          blur = factor * 18;
-        } else {
-          opacity = baseOpacity;
-          blur = 0;
-        }
-
-        drawCandle(c, opacity, blur);
-      });
-    };
-
-    const drawCandle = (c: Candle, opacity: number, blur: number) => {
-      const color = c.isBullish ? bullColor : bearColor;
-      const bodyTop = Math.min(c.open, c.close);
-      const bodyHeight = Math.max(2, Math.abs(c.close - c.open));
-      const candleWidth = Math.max(4, Math.min(10, width / candles.length * 0.5));
-
-      ctx.save();
-      ctx.globalAlpha = opacity;
-
-      if (blur > 0) {
-        ctx.shadowColor = color;
-        ctx.shadowBlur = blur;
-      }
-
-      ctx.fillStyle = color;
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1.5;
-
-      // Wick
-      ctx.beginPath();
-      ctx.moveTo(c.x, c.high);
-      ctx.lineTo(c.x, c.low);
-      ctx.stroke();
-
-      // Body
-      ctx.fillRect(c.x - candleWidth / 2, bodyTop, candleWidth, bodyHeight);
-
-      ctx.restore();
-    };
-
-    animationFrameId = requestAnimationFrame(render);
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(resizeTimer);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      mediaQuery.removeEventListener('change', handleMotionChange);
-    };
-  }, [candleCount, baseOpacity, glowOpacity, cycleDuration, bullColor, bearColor]);
+  const data = useMemo(() => buildData(count), [count]);
+  const marks = useMemo(
+    () => [0.35, 0.5, 0.7].map((r) => Math.round((count - 1) * r)),
+    [count]
+  );
+  const dot = useMemo(() => makeDot(marks), [marks]);
 
   return (
     <div
-      className="fixed inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 0 }}
       aria-hidden="true"
+      className={cn("pointer-events-none relative w-full select-none", className)}
+      style={{
+        maskImage:
+          "linear-gradient(to right, transparent, black 14%, black 86%, transparent)",
+        WebkitMaskImage:
+          "linear-gradient(to right, transparent, black 14%, black 86%, transparent)",
+      }}
     >
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
-      {/* Radial vignette overlay fading to #0A0F0D at edges */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(circle at 50% 50%, rgba(10, 15, 13, 0) 40%, rgba(10, 15, 13, 0.85) 95%, #0A0F0D 100%)',
-        }}
-      />
+      <style>{`
+        @keyframes cb-wave {
+          0%   { opacity: .55; filter: none; }
+          3%   { opacity: 1;   filter: drop-shadow(0 0 7px rgba(61,220,151,.9)); }
+          8%   { opacity: .55; filter: none; }
+          100% { opacity: .55; filter: none; }
+        }
+        @keyframes cb-all {
+          0%, 52%   { filter: brightness(1); }
+          58%, 64%  { filter: brightness(1.8) drop-shadow(0 0 14px rgba(61,220,151,.5)); }
+          72%, 100% { filter: brightness(1); }
+        }
+        @keyframes cb-halo {
+          0%, 100% { opacity: .35; transform: scale(.8); }
+          50%      { opacity: .95; transform: scale(1.15); }
+        }
+        .cb-candle { animation: cb-wave 12s ease-in-out infinite; }
+        .cb-all    { animation: cb-all 12s ease-in-out infinite; }
+        .cb-halo   { transform-box: fill-box; transform-origin: center; animation: cb-halo 3.6s ease-in-out infinite; }
+        .cb-curve  { filter: drop-shadow(0 0 6px rgba(61,220,151,.75)); }
+        @media (prefers-reduced-motion: reduce) {
+          .cb-candle, .cb-all, .cb-halo { animation: none; }
+          .cb-candle { opacity: .75; }
+        }
+      `}</style>
+
+      {/* Shared gradients (referenced by url(#id)) */}
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <linearGradient id="cb-bull" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7DFFC0" stopOpacity="0.95" />
+            <stop offset="55%" stopColor="#2FBF7F" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#0E3B28" stopOpacity="0.25" />
+          </linearGradient>
+          <linearGradient id="cb-bear" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#FF5C5C" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#3B1212" stopOpacity="0.15" />
+          </linearGradient>
+          <radialGradient id="cb-halo">
+            <stop offset="0%" stopColor="#3DDC97" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#3DDC97" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+      </svg>
+
+      <div className="cb-all h-[220px] w-full md:h-[320px]">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+          <ComposedChart
+            data={data}
+            margin={{ top: 10, right: 0, bottom: 0, left: 0 }}
+            barCategoryGap={0}
+          >
+            <XAxis dataKey="i" hide />
+            <YAxis hide domain={[10, 90]} />
+
+            <Bar
+              dataKey="range"
+              barSize={10}
+              isAnimationActive={false}
+              shape={(p: ShapeProps) => <CandleShape {...p} />}
+            />
+
+            <Line
+              className="cb-curve"
+              type="monotone"
+              dataKey="trend"
+              stroke="#5BF0AE"
+              strokeWidth={1.6}
+              dot={dot}
+              activeDot={false}
+              isAnimationActive
+              animationDuration={2800}
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

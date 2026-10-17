@@ -25,7 +25,7 @@ export const StatsStrip: React.FC = () => {
                 <div className="w-10 h-10 rounded-xl bg-[#3DDC97]/15 border border-[#3DDC97]/30 flex items-center justify-center text-[#3DDC97] mb-1">
                   <Icon className="w-5 h-5" />
                 </div>
-                <div className="font-heading font-black text-xl sm:text-2xl font-neue text-[#3DDC97] tracking-tight">
+                <div className="font-heading font-black text-xl sm:text-2xl font-telegraf text-[#3DDC97] tracking-tight">
                   {s.title}
                 </div>
                 <div className="text-xs font-medium text-[#9AA8A1]">

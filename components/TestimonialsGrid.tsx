@@ -36,7 +36,7 @@ export const TestimonialsGrid: React.FC = () => {
                 <Quote className="w-10 h-10 fill-current" />
               </div>
 
-              <p className="text-white text-base sm:text-lg leading-relaxed font-neue mb-8">
+              <p className="text-white text-base sm:text-lg leading-relaxed font-telegraf mb-8">
                 &ldquo;{t.quote}&rdquo;
               </p>
 

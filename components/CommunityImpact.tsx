@@ -28,7 +28,7 @@ export const CommunityImpact: React.FC = () => {
                   <Icon className="w-6 h-6 fill-current" />
                 </div>
                 <div>
-                  <div className="font-heading font-black text-3xl font-neue text-white tracking-tight">
+                  <div className="font-heading font-black text-3xl font-telegraf text-white tracking-tight">
                     {item.title}
                   </div>
                   <div className="text-xs font-medium text-[#9AA8A1] uppercase tracking-wider mt-0.5">

@@ -23,6 +23,7 @@ import { CommunityImpact } from '@/components/CommunityImpact';
 import { NewsletterBar } from '@/components/NewsletterBar';
 import { FinalYellowBand } from '@/components/FinalYellowBand';
 import { Footer } from '@/components/Footer';
+import { TrustedBy } from '@/components/trustedby';
 
 export default function Home() {
   return (
@@ -31,21 +32,8 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <FeaturedOn />
-        <TestimonialsGrid />
-        <PlatformIntro />
-        <VideoLibrary />
-        <StatsStrip />
-        <WhyLearnWithUs />
-        <BookBanner />
-        <WelcomeElite />
+        <TrustedBy />
         <PricingSection />
-        <CharityBanner />
-        <TopicsIncluded />
-        <HowMuchContent />
-        <TradingForBetterWorld />
-        <CommunityImpact />
-        <NewsletterBar />
-        <FinalYellowBand />
       </main>
       <Footer />
     </div>

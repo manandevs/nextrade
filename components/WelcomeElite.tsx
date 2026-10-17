@@ -13,7 +13,7 @@ export const WelcomeElite: React.FC = () => {
         <div className="bg-[#121B17] border border-[#3DDC97]/30 rounded-2xl p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-xl">
           
           <div className="space-y-3 text-left">
-            <span className="text-xs font-neue uppercase tracking-widest text-[#3DDC97]">
+            <span className="text-xs font-telegraf uppercase tracking-widest text-[#3DDC97]">
               WELCOME TO THE ELITE
             </span>
             <h2 className="font-heading text-2xl sm:text-3xl font-extrabold uppercase tracking-tight text-white">
