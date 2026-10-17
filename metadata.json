@@ -1,6 +1,0 @@
-{
-  "name": "NEXTRADE – Trading Education & Community",
-  "description": "A premium subscription trading-education and community platform with live sessions, lessons and market breakdowns for retail traders.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
