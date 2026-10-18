@@ -38,10 +38,10 @@ export const Hero: React.FC = () => {
           {/* Left Column */}
           <div className="flex flex-col items-start text-left lg:col-span-7">
             {/* Brand Pill */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 py-1 pl-3.5 pr-1 text-[11px] font-medium text-white/85 backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 py-1 pl-3.5 pr-1 text-xs tracking-wider font-medium text-white/85 backdrop-blur-sm">
               <span>Next-gen trading platform</span>
 
-              <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-white">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-white text-xs tracking-wider">
                 <BadgeCheck className="h-3 w-3 text-[#3DDC97]" />
                 NEXTRADE
               </span>
@@ -55,7 +55,7 @@ export const Hero: React.FC = () => {
             </h1>
 
             {/* Description */}
-            <p className="mt-5 max-w-md text-sm leading-relaxed text-white/60 sm:text-base">
+            <p className="mt-4 max-w-lg text-base leading-relaxed text-white/60 sm:text-lg">
               Unlock smarter trading with NEXTRADE. Explore market insights,
               sharpen your trading strategies, and discover new opportunities
               with the tools and knowledge you need to make more informed

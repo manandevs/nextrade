@@ -18,9 +18,9 @@ export const WhatIsNextrade: React.FC = () => {
           />
 
           {/* 3D phone illustration (add your image) */}
-          <div className="absolute inset-x-0 top-0 h-[68%]">
+          <div className="absolute inset-x-0 top-0 h-[150%] -mt-[30%]">
             <Image
-              src="/images/what-is/phone-3d.png"
+              src="/images/what-is/phone_3d.png"
               alt="3D trading app illustration"
               fill
               sizes="(min-width: 1024px) 560px, 100vw"

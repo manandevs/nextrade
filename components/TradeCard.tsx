@@ -115,21 +115,21 @@ const TradeCard: React.FC = () => {
     <div className="relative w-full max-w-[420px] rounded-2xl border border-white/10 bg-[#0F1613]/80 p-4 shadow-[0_0_80px_rgba(61,220,151,0.14)] backdrop-blur-xl sm:p-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-[#5BF0AE] to-[#1FA36B]">
+        <div className="relative flex h-16 w-16 rounded-full overflow-hidden">
           <Image
             src="/images/coins/bitcoin.jpg"
             alt="Bitcoin"
             fill
-            sizes="44px"
             referrerPolicy="no-referrer"
             className="object-cover"
           />
         </div>
 
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-white">BTC/USDT</p>
-          <p className="truncate text-xs text-white/45">
-            {bitcoin ? bitcoin.sub : "Bitcoin Token"} · MCAP: {bitcoin?.marketCap ?? "$1.34T"}
+        <div className="min-w-0 flex-1 items-center">
+          <p className="text-2xl font-semibold text-white">BTC/USDT</p>
+          <p className="truncate text-lg text-white/45">
+            {bitcoin ? bitcoin.sub : "Bitcoin Token"} · MCAP:{" "}
+            {bitcoin?.marketCap ?? "$1.34T"}
           </p>
         </div>
       </div>
@@ -145,14 +145,14 @@ const TradeCard: React.FC = () => {
               <Icon
                 className={cn(
                   "h-3.5 w-3.5",
-                  i === 1 && "fill-[#FFD43B] text-[#FFD43B]"
+                  i === 1 && "fill-[#FFD43B] text-[#FFD43B]",
                 )}
               />
             </span>
           ))}
         </div>
 
-        <span className="rounded-lg border border-white/20 px-4 py-1.5 text-xs font-medium text-white">
+        <span className="rounded-lg border border-white/20 px-4 py-1.5 text-base font-medium text-white">
           Trade
         </span>
       </div>
@@ -179,7 +179,7 @@ const TradeCard: React.FC = () => {
       </div>
 
       <div className="mt-2 flex items-center justify-between gap-2 text-xs text-white/50">
-        <span className="flex items-center gap-1.5">
+        <span className="flex items-center gap-1.5 text-lg">
           <span className="h-3 w-3 rounded-full bg-[#7C8CFF]" />
           Vol: {bitcoin?.volume24h ?? "$34.2B"}
         </span>
@@ -189,7 +189,7 @@ const TradeCard: React.FC = () => {
             "flex items-center gap-1.5",
             (bitcoin?.change24h ?? 0) >= 0
               ? "text-[#3DDC97]"
-              : "text-[#FF5C5C]"
+              : "text-[#FF5C5C]",
           )}
         >
           24H: {bitcoin ? formatChange(bitcoin.change24h) : "--"}
@@ -208,29 +208,28 @@ const TradeCard: React.FC = () => {
               className="rounded-xl border border-white/10 bg-white/[0.04] p-3 transition-colors hover:border-[#3DDC97]/30"
             >
               <div className="flex items-center gap-2">
-                <div className="relative flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-full">
+                <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full">
                   <Image
                     src={coin.image}
                     alt={coin.name}
                     fill
-                    sizes="24px"
                     referrerPolicy="no-referrer"
                     className="object-cover"
                   />
                 </div>
 
                 <div className="min-w-0">
-                  <p className="truncate text-[11px] font-medium text-white">
+                  <p className="truncate text-lg font-medium text-white">
                     {coin.name}
                   </p>
-                  <p className="text-[9px] text-white/40">{coin.symbol}</p>
+                  <p className="text-sm text-white/40">{coin.symbol}</p>
                 </div>
               </div>
 
               <div className="mt-3 flex items-center justify-between">
                 <div>
-                  <p className="text-[9px] text-white/40">Price</p>
-                  <p className="mt-0.5 truncate text-xs font-semibold text-white">
+                  <p className="text-sm text-white/40">Price</p>
+                  <p className="mt-0.5 truncate text-xl font-semibold text-white">
                     {formatPrice(coin.price)}
                   </p>
                 </div>
@@ -238,15 +237,15 @@ const TradeCard: React.FC = () => {
               </div>
 
               <div className="mt-2 flex items-center justify-between pt-1 border-t border-white/5">
-                <span className="text-[9px] text-white/40">
+                <span className="text-sm text-white/40">
                   Cap: {coin.marketCap}
                 </span>
                 <span
                   className={cn(
-                    "rounded px-1 py-0.5 text-[8px] font-semibold",
+                    "rounded px-1 py-0.5 text-sm font-semibold",
                     up
                       ? "bg-[#3DDC97]/15 text-[#3DDC97]"
-                      : "bg-[#FF5C5C]/15 text-[#FF5C5C]"
+                      : "bg-[#FF5C5C]/15 text-[#FF5C5C]",
                   )}
                 >
                   {formatChange(change)}
@@ -259,10 +258,10 @@ const TradeCard: React.FC = () => {
 
       {/* Attribution and Error State */}
       <div className="mt-3 flex items-center justify-between gap-2">
-        <p className="text-xs text-white/35">Market data via CoinGecko</p>
+        <p className="text-base text-white/35">Market data via CoinGecko</p>
 
         {error && (
-          <p role="status" className="text-xs text-[#FF5C5C]">
+          <p role="status" className="text-base text-[#FF5C5C]">
             Update failed
           </p>
         )}
