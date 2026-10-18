@@ -4,6 +4,9 @@ import { Hero } from '@/components/Hero';
 import { FeaturedOn } from '@/components/FeaturedOn';
 import { PricingSection } from '@/components/PricingSection';
 import { TrustedBy } from '@/components/trustedby';
+import { WhyChooseUs } from '@/components/Whychooseus';
+import { WhatIsNextrade } from '@/components/Whatisnextrade';
+import { JoinCTA } from '@/components/Joincta';
 
 export default function Home() {
   return (
@@ -13,6 +16,10 @@ export default function Home() {
         <Hero />
         <FeaturedOn />
         <TrustedBy />
+        
+        <WhyChooseUs />
+        <WhatIsNextrade />
+        <JoinCTA />
         <PricingSection />
       </main>
     </div>

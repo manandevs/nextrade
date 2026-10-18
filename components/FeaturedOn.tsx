@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
@@ -12,8 +13,12 @@ const STATS = [
   { prefix: "$", value: 320, suffix: "M+", label: "Performance Fee" },
 ];
 
-/* Count-up that runs once when scrolled into view */
-const Stat: React.FC<(typeof STATS)[number] & { className?: string }> = ({
+type StatProps = (typeof STATS)[number] & {
+  className?: string;
+};
+
+/* Count-up animation that runs once when the statistic enters view. */
+const Stat: React.FC<StatProps> = ({
   prefix,
   value,
   suffix,
@@ -21,78 +26,117 @@ const Stat: React.FC<(typeof STATS)[number] & { className?: string }> = ({
   className,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [n, setN] = useState(() =>
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      ? value
-      : 0
-  );
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const element = ref.current;
+    if (!element) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      setCount(value);
       return;
     }
 
-    let raf = 0;
-    const io = new IntersectionObserver(
+    let animationFrame = 0;
+    let observer: IntersectionObserver | undefined;
+    let hasAnimated = false;
+
+    const animate = () => {
+      if (hasAnimated) return;
+      hasAnimated = true;
+
+      const startTime = performance.now();
+      const duration = 1500;
+
+      const tick = (now: number) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+        setCount(Math.round(value * easedProgress));
+
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(tick);
+        }
+      };
+
+      animationFrame = requestAnimationFrame(tick);
+    };
+
+    observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) return;
-        io.disconnect();
-        const start = performance.now();
-        const duration = 1500;
-        const tick = (now: number) => {
-          const p = Math.min((now - start) / duration, 1);
-          setN(Math.round(value * (1 - Math.pow(1 - p, 3))));
-          if (p < 1) raf = requestAnimationFrame(tick);
-        };
-        raf = requestAnimationFrame(tick);
+        if (entry.isIntersecting) {
+          animate();
+          observer?.disconnect();
+        }
       },
       { threshold: 0.4 }
     );
-    io.observe(el);
+
+    observer.observe(element);
 
     return () => {
-      io.disconnect();
-      cancelAnimationFrame(raf);
+      observer?.disconnect();
+      cancelAnimationFrame(animationFrame);
     };
   }, [value]);
 
   return (
-    <div ref={ref} className={cn("flex flex-col items-center gap-2 px-4 py-2", className)}>
-      <span className="text-3xl font-semibold text-[#3DDC97] sm:text-4xl">
+    <div
+      ref={ref}
+      className={cn(
+        "flex flex-col items-center gap-2 px-4 py-2 text-center",
+        className
+      )}
+    >
+      <span className="text-3xl font-semibold tracking-tight text-[#3DDC97] sm:text-4xl">
         {prefix}
-        {n}
+        {count}
         {suffix}
       </span>
-      <span className="text-xs text-white/60 sm:text-[13px]">{label}</span>
+
+      <span className="text-xs text-white/60 sm:text-[13px]">
+        {label}
+      </span>
     </div>
   );
 };
 
 export const FeaturedOn: React.FC = () => {
   return (
-    <section className="relative py-12 sm:py-16">
+    <section
+      className="relative py-12 sm:py-16"
+      aria-label="Platform rating and statistics"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Rating pill */}
         <div className="flex justify-center">
-          <div className="inline-flex items-center gap-3 rounded-md border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
-            <span className="text-sm font-medium text-white">Excellent</span>
+          <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-md border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
+            <span className="text-sm font-medium text-white">
+              Excellent
+            </span>
 
-            <span className="flex items-center gap-0.5" aria-label="Rated 4.5 out of 5">
-              {[0, 1, 2, 3, 4].map((i) => (
+            <span
+              className="flex items-center gap-0.5"
+              role="img"
+              aria-label="Rated 4.5 out of 5"
+            >
+              {[0, 1, 2, 3, 4].map((index) => (
                 <span
-                  key={i}
+                  key={index}
                   className="relative flex h-[18px] w-[18px] items-center justify-center overflow-hidden rounded-[3px] bg-white/10"
                 >
-                  {/* filled portion (last star is half) */}
                   <span
                     className="absolute inset-y-0 left-0 bg-[#00B67A]"
-                    style={{ width: i === 4 ? "50%" : "100%" }}
+                    style={{
+                      width: index === 4 ? "50%" : "100%",
+                    }}
                   />
-                  <Star className="relative h-3 w-3 fill-white text-white" />
+
+                  <Star className="relative z-10 h-3 w-3 fill-white text-white" />
                 </span>
               ))}
             </span>
@@ -104,15 +148,19 @@ export const FeaturedOn: React.FC = () => {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="mt-10 grid grid-cols-2 gap-y-8 md:grid-cols-5 md:gap-y-0">
-          {STATS.map((s, idx) => (
+        {/* Statistics */}
+        <div className="mt-10 grid grid-cols-2 gap-x-2 gap-y-8 md:grid-cols-5 md:gap-y-0">
+          {STATS.map((stat, index) => (
             <Stat
-              key={s.label}
-              {...s}
+              key={stat.label}
+              {...stat}
               className={cn(
-                idx > 0 && "md:border-l md:border-white/10",
-                idx === STATS.length - 1 && "col-span-2 md:col-span-1"
+                "relative",
+                index > 0 &&
+                  index !== 2 &&
+                  "md:border-l md:border-white/10",
+                index === STATS.length - 1 &&
+                  "col-span-2 md:col-span-1"
               )}
             />
           ))}
@@ -121,3 +169,5 @@ export const FeaturedOn: React.FC = () => {
     </section>
   );
 };
+
+export default FeaturedOn;
