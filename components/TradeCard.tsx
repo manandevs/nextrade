@@ -112,7 +112,7 @@ const TradeCard: React.FC = () => {
   const gridCoins = coins.filter((coin) => coin.id !== "bitcoin");
 
   return (
-    <div className="relative w-full max-w-[420px] rounded-2xl border border-white/10 bg-[#0F1613]/80 p-4 shadow-[0_0_80px_rgba(61,220,151,0.14)] backdrop-blur-xl sm:p-5">
+    <div className="relative w-full max-w-[420px] rounded-2xl border border-white/10 bg-[#0F1613]/80 p-4 shadow-[0_0_8px_rgba(61,220,151,0.14)] backdrop-blur-xl sm:p-5">
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="relative flex h-16 w-16 rounded-full overflow-hidden">

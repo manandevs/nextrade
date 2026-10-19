@@ -62,20 +62,20 @@ export const WhyChooseUs: React.FC = () => {
         <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2">
           {ITEMS.map((item) => (
             <article key={item.title} className="group">
-              <div className="relative h-[200px] w-full overflow-hidden rounded-2xl bg-white/[0.02] sm:h-[220px]">
+              <div className="relative h-72 w-full overflow-hidden rounded-2xl bg-white/[0.02] sm:h-96">
                 <Image
                   src={item.image}
                   alt={item.alt}
                   fill
                   sizes="(min-width: 768px) 480px, 100vw"
-                  className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.04]"
+                  className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.04]"
                 />
               </div>
 
-              <h3 className="mt-6 text-lg font-medium text-white sm:text-xl">
+              <h3 className="mt-6 text-2xl font-medium text-white sm:text-3xl">
                 {item.title}
               </h3>
-              <p className="mt-2 max-w-md text-[13px] leading-relaxed text-white/50 sm:text-sm">
+              <p className="mt-2 max-w-md text-base leading-relaxed text-white/50 sm:text-lg">
                 {item.text}
               </p>
             </article>

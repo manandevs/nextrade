@@ -15,24 +15,8 @@ import TradeCard from "@/components/TradeCard";
 export const Hero: React.FC = () => {
   return (
     <section
-      className="relative isolate min-h-screen overflow-hidden py-16 lg:py-24"
-      style={{
-        backgroundImage: "url('/images/image.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
+      className="pb-16 lg:pb-24 pt-36"
     >
-      {/* Readability Overlay + Emerald Glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(10,15,13,0.85) 0%, rgba(10,15,13,0.35) 55%, rgba(10,15,13,0.1) 100%), radial-gradient(ellipse 45% 55% at 78% 40%, rgba(61,220,151,0.20), transparent 70%)",
-        }}
-      />
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left Column */}

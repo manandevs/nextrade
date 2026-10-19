@@ -26,8 +26,8 @@ export default function RootLayout({
       lang="en"
       className={`${telegraf.variable} ${telegraf.className} antialiased`}
     >
-      <body className="bg-[#0A0F0D] text-white relative">
-        <CandleBackground className="fixed inset-0 z-0 opacity-40 pointer-events-none" />
+      <body className="relative">
+        {/* <CandleBackground className="fixed inset-0 z-0 opacity-40 pointer-events-none" /> */}
         <div className="relative z-10 flex min-h-screen flex-col">
           {children}
         </div>
