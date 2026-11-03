@@ -1,4 +1,3 @@
-
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -14,17 +13,28 @@ import TradeCard from "@/components/TradeCard";
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative overflow-hidden pb-16 pt-36 lg:pb-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
+    <section
+      className="relative overflow-hidden pb-16 pt-36 lg:pb-24"
+      style={{
+        backgroundImage: "url('/images/candlestick-bg.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Subtle dark overlay for readability */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 bg-[#070D0A]/80 backdrop-blur-[2px]"
+      />
 
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* Left Column */}
           <div className="flex flex-col items-start text-left lg:col-span-7">
-
             {/* Brand Pill */}
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 py-1 pl-3.5 pr-1 text-xs font-medium tracking-wider text-white/85 backdrop-blur-sm">
               <span>Next-gen trading platform</span>
-
               <span className="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-1 text-xs tracking-wider text-white">
                 <BadgeCheck className="h-3 w-3 text-[#3DDC97]" />
                 NEXTRADE
@@ -62,7 +72,6 @@ export const Hero: React.FC = () => {
                 Pick Your Plan
                 <ArrowUpRight />
               </a>
-
               <a
                 href="#curriculum"
                 className={cn(
@@ -83,7 +92,6 @@ export const Hero: React.FC = () => {
           <div className="flex justify-center lg:col-span-5 lg:justify-end">
             <TradeCard />
           </div>
-
         </div>
       </div>
     </section>
